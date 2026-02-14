@@ -16,6 +16,14 @@
             {% endfor %}
         </div>
 
+        <div class="form-group">
+            <label for="size">Diaper Size</label>
+            {{ form.size(class="form-control") }}
+            {% for error in form.size.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
         <div class="form-row">
             <div class="form-group">
                 <label for="num_boxes">Number of Boxes</label>

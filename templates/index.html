@@ -40,6 +40,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Brand</th>
+                    <th>Size</th>
                     <th>Boxes</th>
                     <th>Per Box</th>
                     <th>Total</th>
@@ -54,6 +55,7 @@
                 <tr>
                     <td>{{ p.date }}</td>
                     <td>{{ p.brand }}</td>
+                    <td>{{ p.size or '' }}</td>
                     <td>{{ p.num_boxes }}</td>
                     <td>{{ p.diapers_per_box }}</td>
                     <td>{{ total }}</td>

@@ -4,6 +4,17 @@ from wtforms.validators import DataRequired, NumberRange, Optional
 from datetime import date
 
 
+SIZE_CHOICES = [
+    ('Newborn', 'Newborn'),
+    ('Size 1', 'Size 1'),
+    ('Size 2', 'Size 2'),
+    ('Size 3', 'Size 3'),
+    ('Size 4', 'Size 4'),
+    ('Size 5', 'Size 5'),
+    ('Size 6', 'Size 6'),
+    ('Size 7', 'Size 7'),
+]
+
 DIAPERS_PER_BOX_CHOICES = [
     ('20', '20'), ('24', '24'), ('32', '32'), ('40', '40'),
     ('50', '50'), ('60', '60'), ('72', '72'), ('80', '80'),
@@ -14,6 +25,11 @@ DIAPERS_PER_BOX_CHOICES = [
 
 class PurchaseForm(FlaskForm):
     date = DateField('Date', default=date.today, validators=[DataRequired()])
+    size = SelectField(
+        'Diaper Size',
+        choices=SIZE_CHOICES,
+        validators=[DataRequired()]
+    )
     num_boxes = SelectField(
         'Number of Boxes',
         choices=[(str(i), str(i)) for i in range(1, 11)],

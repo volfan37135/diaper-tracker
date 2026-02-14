@@ -35,6 +35,7 @@ def add_no_cache(response):
 def ensure_db():
     if not hasattr(app, '_db_initialized'):
         models.init_db()
+        models.migrate_add_size_column()
         models.migrate_box_openings()
         app._db_initialized = True
 
@@ -74,7 +75,8 @@ def add_purchase():
             num_boxes=int(form.num_boxes.data),
             diapers_per_box=diapers_per_box,
             brand=form.brand.data.strip(),
-            cost=float(form.cost.data)
+            cost=float(form.cost.data),
+            size=form.size.data
         )
         if form.date_opened.data:
             openings = models.get_box_openings(purchase_id)
@@ -199,7 +201,7 @@ def export_pdf():
     # Purchases table
     if purchases:
         elements.append(Paragraph('Purchase History', styles['Heading2']))
-        header = ['Date', 'Boxes', 'Per Box', 'Total', 'Brand', 'Cost', '$/Diaper', 'Opened']
+        header = ['Date', 'Brand', 'Size', 'Boxes', 'Per Box', 'Total', 'Cost', '$/Diaper', 'Opened']
         data = [header]
         for p in purchases:
             total = p['num_boxes'] * p['diapers_per_box']
@@ -209,10 +211,11 @@ def export_pdf():
             opened_str = f"{opened_count}/{p['num_boxes']}"
             data.append([
                 p['date'],
+                p['brand'][:25],
+                p['size'] or '',
                 str(p['num_boxes']),
                 str(p['diapers_per_box']),
                 str(total),
-                p['brand'][:25],
                 f"${p['cost']:.2f}",
                 f"${cpd:.4f}",
                 opened_str,
@@ -277,7 +280,7 @@ def export_excel():
 
     # Purchases sheet
     ws_data = wb.create_sheet('Purchases')
-    headers = ['Date', 'Boxes', 'Diapers/Box', 'Total Diapers', 'Brand', 'Cost', 'Cost/Diaper', 'Boxes Opened']
+    headers = ['Date', 'Brand', 'Size', 'Boxes', 'Diapers/Box', 'Total Diapers', 'Cost', 'Cost/Diaper', 'Boxes Opened']
     header_fill = PatternFill(start_color='2C3E50', end_color='2C3E50', fill_type='solid')
     header_font_white = Font(bold=True, color='FFFFFF')
     thin_border = Border(
@@ -297,15 +300,15 @@ def export_excel():
         openings = box_openings.get(p['id'], [])
         opened_count = sum(1 for o in openings if o['date_opened'])
         values = [
-            p['date'], p['num_boxes'], p['diapers_per_box'],
-            total, p['brand'], round(p['cost'], 2), round(cpd, 4),
+            p['date'], p['brand'], p['size'] or '', p['num_boxes'], p['diapers_per_box'],
+            total, round(p['cost'], 2), round(cpd, 4),
             f"{opened_count}/{p['num_boxes']}"
         ]
         for col, val in enumerate(values, 1):
             cell = ws_data.cell(row=row_idx, column=col, value=val)
             cell.border = thin_border
 
-    for col_letter, width in [('A', 12), ('B', 8), ('C', 13), ('D', 14), ('E', 30), ('F', 10), ('G', 12), ('H', 14)]:
+    for col_letter, width in [('A', 12), ('B', 20), ('C', 10), ('D', 8), ('E', 13), ('F', 14), ('G', 10), ('H', 12), ('I', 14)]:
         ws_data.column_dimensions[col_letter].width = width
 
     buf = io.BytesIO()

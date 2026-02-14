@@ -11,6 +11,7 @@
             <tr>
                 <th>Date</th>
                 <th>Brand</th>
+                <th>Size</th>
                 <th>Boxes</th>
                 <th>Per Box</th>
                 <th>Total Diapers</th>
@@ -30,6 +31,7 @@
             <tr class="purchase-row">
                 <td>{{ p.date }}</td>
                 <td>{{ p.brand }}</td>
+                <td>{{ p.size or '' }}</td>
                 <td>{{ p.num_boxes }}</td>
                 <td>{{ p.diapers_per_box }}</td>
                 <td>{{ total }}</td>
@@ -54,7 +56,7 @@
                 </td>
             </tr>
             <tr class="box-opening-row">
-                <td colspan="9">
+                <td colspan="10">
                     <div class="box-opening-strip">
                         <span class="box-opening-label">
                             Boxes opened: <strong>{{ opened_count }}/{{ p.num_boxes }}</strong>

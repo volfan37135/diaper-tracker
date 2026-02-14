@@ -24,6 +24,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS purchases (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date TEXT NOT NULL,
+            size TEXT NOT NULL DEFAULT '',
             num_boxes INTEGER NOT NULL,
             diapers_per_box INTEGER NOT NULL,
             brand TEXT NOT NULL,
@@ -97,12 +98,12 @@ def delete_brand(brand_id):
 
 # Purchase operations
 
-def add_purchase(date, num_boxes, diapers_per_box, brand, cost):
+def add_purchase(date, num_boxes, diapers_per_box, brand, cost, size=''):
     conn = get_db()
     cursor = conn.execute(
-        '''INSERT INTO purchases (date, num_boxes, diapers_per_box, brand, cost)
-           VALUES (?, ?, ?, ?, ?)''',
-        (date, num_boxes, diapers_per_box, brand.strip(), cost)
+        '''INSERT INTO purchases (date, size, num_boxes, diapers_per_box, brand, cost)
+           VALUES (?, ?, ?, ?, ?, ?)''',
+        (date, size, num_boxes, diapers_per_box, brand.strip(), cost)
     )
     purchase_id = cursor.lastrowid
     for box_num in range(1, num_boxes + 1):
@@ -197,6 +198,15 @@ def update_box_opening(opening_id, date_opened):
         (date_opened, opening_id)
     )
     conn.commit()
+    conn.close()
+
+
+def migrate_add_size_column():
+    conn = get_db()
+    columns = [row[1] for row in conn.execute('PRAGMA table_info(purchases)').fetchall()]
+    if 'size' not in columns:
+        conn.execute("ALTER TABLE purchases ADD COLUMN size TEXT NOT NULL DEFAULT ''")
+        conn.commit()
     conn.close()
 
 
