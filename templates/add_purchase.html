@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Add Purchase - Diaper Tracker{% endblock %}
+
+{% block content %}
+<h1>Add Purchase</h1>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('add_purchase') }}" class="form">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="date">Date</label>
+            {{ form.date(class="form-control", type="date") }}
+            {% for error in form.date.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="num_boxes">Number of Boxes</label>
+                {{ form.num_boxes(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                <label for="diapers_per_box">Diapers per Box</label>
+                {{ form.diapers_per_box(class="form-control", id="diapers_per_box") }}
+            </div>
+
+            <div class="form-group" id="customQtyGroup" style="display:none;">
+                <label for="custom_diapers_per_box">Custom Quantity</label>
+                <input type="number" name="custom_diapers_per_box" id="custom_diapers_per_box"
+                       class="form-control" min="1" placeholder="Enter quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" name="brand" id="brand" class="form-control"
+                   value="{{ form.brand.data or '' }}"
+                   list="brandList" autocomplete="off" required
+                   placeholder="Start typing a brand name...">
+            <datalist id="brandList">
+                {% for b in brands %}
+                <option value="{{ b }}">
+                {% endfor %}
+            </datalist>
+            {% for error in form.brand.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="cost">Total Cost ($)</label>
+            {{ form.cost(class="form-control", step="0.01", min="0.01", placeholder="0.00") }}
+            {% for error in form.cost.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="date_opened">Date Opened (optional)</label>
+            {{ form.date_opened(class="form-control", type="date") }}
+            <span class="help-text">Leave blank if not opened yet. You can set this later from History.</span>
+            {% for error in form.date_opened.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Purchase</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('diapers_per_box').addEventListener('change', function() {
+    var customGroup = document.getElementById('customQtyGroup');
+    var customInput = document.getElementById('custom_diapers_per_box');
+    if (this.value === 'custom') {
+        customGroup.style.display = 'block';
+        customInput.required = true;
+        customInput.focus();
+    } else {
+        customGroup.style.display = 'none';
+        customInput.required = false;
+        customInput.value = '';
+    }
+});
+</script>
+{% endblock %}

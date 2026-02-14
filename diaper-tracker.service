@@ -1,0 +1,26 @@
+[Unit]
+Description=Diaper Purchase Tracker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/diaper-tracker
+Environment="PATH=/opt/diaper-tracker/venv/bin:/usr/bin:/bin:/usr/local/bin"
+Environment="SECRET_KEY=2416b9ee3c870d5f6b9e6db5dcd3176c3e23833454295b0e4d91314f146131e9"
+ExecStart=/opt/diaper-tracker/venv/bin/gunicorn --bind 127.0.0.1:5003 --workers 2 --timeout 120 app:app
+
+Restart=always
+RestartSec=10
+
+# Security hardening
+NoNewPrivileges=true
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+ReadWritePaths=/opt/diaper-tracker
+
+[Install]
+WantedBy=multi-user.target

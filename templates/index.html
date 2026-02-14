@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Diaper Tracker{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total_purchases }}</div>
+        <div class="stat-label">Total Purchases</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total_boxes }}</div>
+        <div class="stat-label">Total Boxes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "{:,}".format(stats.total_diapers) }}</div>
+        <div class="stat-label">Total Diapers</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">${{ "%.2f"|format(stats.total_cost) }}</div>
+        <div class="stat-label">Total Spent</div>
+    </div>
+    <div class="stat-card highlight">
+        <div class="stat-value">${{ "%.4f"|format(stats.avg_cost_per_diaper) }}</div>
+        <div class="stat-label">Avg Cost / Diaper</div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>Recent Purchases</h2>
+        <a href="{{ url_for('history') }}" class="btn btn-sm">View All</a>
+    </div>
+
+    {% if recent %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Brand</th>
+                    <th>Boxes</th>
+                    <th>Per Box</th>
+                    <th>Total</th>
+                    <th>Cost</th>
+                    <th>$/Diaper</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in recent %}
+                {% set total = p.num_boxes * p.diapers_per_box %}
+                {% set cpd = p.cost / total if total > 0 else 0 %}
+                <tr>
+                    <td>{{ p.date }}</td>
+                    <td>{{ p.brand }}</td>
+                    <td>{{ p.num_boxes }}</td>
+                    <td>{{ p.diapers_per_box }}</td>
+                    <td>{{ total }}</td>
+                    <td>${{ "%.2f"|format(p.cost) }}</td>
+                    <td>${{ "%.4f"|format(cpd) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No purchases yet. <a href="{{ url_for('add_purchase') }}">Add your first purchase!</a></p>
+    {% endif %}
+</div>
+
+<div class="quick-actions">
+    <a href="{{ url_for('add_purchase') }}" class="btn btn-primary btn-lg">+ Add Purchase</a>
+</div>
+{% endblock %}
