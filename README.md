@@ -2,8 +2,6 @@
 
 A web app for tracking diaper purchases, costs, and box opening dates. Built with Flask and SQLite.
 
-**Live at:** https://diaper.lg-fast.com
-
 ## Screenshots
 
 ![Dashboard](static/images/screenshot-dashboard.png)
