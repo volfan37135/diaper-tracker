@@ -4,6 +4,12 @@ A web app for tracking diaper purchases, costs, and box opening dates. Built wit
 
 **Live at:** https://diaper.lg-fast.com
 
+## Screenshots
+
+![Dashboard](static/images/screenshot-dashboard.png)
+
+![Purchase History](static/images/screenshot-history.png)
+
 ## Features
 
 - **Purchase tracking** — Record date, brand, number of boxes, diapers per box, and cost
