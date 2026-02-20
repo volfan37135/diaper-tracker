@@ -76,7 +76,12 @@ Optional — leave blank for gift/unknown purchases. Stored as NULL in SQLite.
 ## Screenshots
 - Stored in `static/images/` — `screenshot-dashboard.png`, `screenshot-history.png`, `screenshot-inventory.png`
 - Referenced in `README.md`
-- To retake: `google-chrome --headless --no-sandbox --disable-gpu --screenshot=static/images/screenshot-<name>.png --window-size=1280,900 http://localhost:5003/<path>`
+- To retake all:
+  ```
+  google-chrome --headless --no-sandbox --disable-gpu --screenshot=/opt/diaper-tracker/static/images/screenshot-dashboard.png --window-size=1280,900 http://localhost:5003/
+  google-chrome --headless --no-sandbox --disable-gpu --screenshot=/opt/diaper-tracker/static/images/screenshot-history.png --window-size=1280,900 http://localhost:5003/history
+  google-chrome --headless --no-sandbox --disable-gpu --screenshot=/opt/diaper-tracker/static/images/screenshot-inventory.png --window-size=1280,900 http://localhost:5003/inventory
+  ```
 
 ## Notes
 - No ORM — raw SQLite3 with `row_factory = sqlite3.Row`
