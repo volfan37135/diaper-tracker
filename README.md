@@ -8,6 +8,8 @@ A web app for tracking diaper purchases, costs, and box opening dates. Built wit
 
 ![Purchase History](static/images/screenshot-history.png)
 
+![Inventory](static/images/screenshot-inventory.png)
+
 ## Features
 
 - **Purchase tracking** — Record date, brand, number of boxes, diapers per box, and optional cost
@@ -15,6 +17,7 @@ A web app for tracking diaper purchases, costs, and box opening dates. Built wit
 - **Dashboard** — Summary stats: total purchases, boxes, diapers, spending, and average cost per diaper
 - **History** — Full purchase history with inline box opening management and delete
 - **Brand management** — Save frequently used brands for quick selection
+- **Inventory** — Per-size quick-glance view of boxes unopened vs. used, auto-refreshes every 60 seconds
 - **Exports** — PDF and Excel reports with all purchase and opening data
 - **Dark mode** — Toggle between light and dark themes
 - **Mobile responsive** — Works on desktop and mobile browsers
@@ -71,6 +74,7 @@ sudo nginx -t && sudo systemctl reload nginx
 │   ├── index.html         # Dashboard
 │   ├── add_purchase.html  # Add purchase form
 │   ├── history.html       # Purchase history with box opening UI
+│   ├── inventory.html     # Per-size inventory summary
 │   └── manage_brands.html # Brand management
 ├── static/
 │   ├── css/style.css      # All styles including dark mode
