@@ -73,6 +73,11 @@ Optional — leave blank for gift/unknown purchases. Stored as NULL in SQLite.
 - Dark mode: `[data-theme="dark"]` selector; toggled via JS, persisted in localStorage
 - Navbar background: `--nav-bg` (#2c3e50 light / #0f3460 dark)
 
+## Screenshots
+- Stored in `static/images/` — `screenshot-dashboard.png`, `screenshot-history.png`, `screenshot-inventory.png`
+- Referenced in `README.md`
+- To retake: `google-chrome --headless --no-sandbox --disable-gpu --screenshot=static/images/screenshot-<name>.png --window-size=1280,900 http://localhost:5003/<path>`
+
 ## Notes
 - No ORM — raw SQLite3 with `row_factory = sqlite3.Row`
 - CSRF protection via Flask-WTF on all POST forms
