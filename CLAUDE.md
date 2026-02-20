@@ -29,8 +29,8 @@
 |-------|---------|---------|
 | `/` | `index` | Dashboard |
 | `/add` | `add_purchase` | Add purchase form |
-| `/history` | `history` | Full history + box opening |
 | `/inventory` | `inventory` | Per-size inventory summary |
+| `/history` | `history` | Full history + box opening |
 | `/brands` | `manage_brands` | Brand list management |
 | `/export/pdf` | `export_pdf` | PDF report download |
 | `/export/excel` | `export_excel` | Excel download |
