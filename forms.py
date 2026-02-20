@@ -43,7 +43,7 @@ class PurchaseForm(FlaskForm):
     custom_diapers_per_box = IntegerField('Custom Quantity', validators=[Optional()])
     brand = StringField('Brand', validators=[DataRequired()])
     cost = DecimalField('Cost ($)', places=2, validators=[
-        DataRequired(), NumberRange(min=0.01)
+        Optional(), NumberRange(min=0.01)
     ])
     date_opened = DateField('Date Opened', validators=[Optional()])
 

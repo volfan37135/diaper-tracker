@@ -37,6 +37,7 @@ def ensure_db():
         models.init_db()
         models.migrate_add_size_column()
         models.migrate_box_openings()
+        models.migrate_cost_nullable()
         app._db_initialized = True
 
 
@@ -75,7 +76,7 @@ def add_purchase():
             num_boxes=int(form.num_boxes.data),
             diapers_per_box=diapers_per_box,
             brand=form.brand.data.strip(),
-            cost=float(form.cost.data),
+            cost=float(form.cost.data) if form.cost.data is not None else None,
             size=form.size.data
         )
         if form.date_opened.data:
@@ -205,7 +206,7 @@ def export_pdf():
         data = [header]
         for p in purchases:
             total = p['num_boxes'] * p['diapers_per_box']
-            cpd = p['cost'] / total if total > 0 else 0
+            cpd = p['cost'] / total if (p['cost'] is not None and total > 0) else None
             openings = box_openings.get(p['id'], [])
             opened_count = sum(1 for o in openings if o['date_opened'])
             opened_str = f"{opened_count}/{p['num_boxes']}"
@@ -216,8 +217,8 @@ def export_pdf():
                 str(p['num_boxes']),
                 str(p['diapers_per_box']),
                 str(total),
-                f"${p['cost']:.2f}",
-                f"${cpd:.4f}",
+                f"${p['cost']:.2f}" if p['cost'] is not None else '—',
+                f"${cpd:.4f}" if cpd is not None else '—',
                 opened_str,
             ])
         t = Table(data, repeatRows=1)
@@ -296,12 +297,14 @@ def export_excel():
 
     for row_idx, p in enumerate(purchases, 2):
         total = p['num_boxes'] * p['diapers_per_box']
-        cpd = p['cost'] / total if total > 0 else 0
+        cpd = p['cost'] / total if (p['cost'] is not None and total > 0) else None
         openings = box_openings.get(p['id'], [])
         opened_count = sum(1 for o in openings if o['date_opened'])
         values = [
             p['date'], p['brand'], p['size'] or '', p['num_boxes'], p['diapers_per_box'],
-            total, round(p['cost'], 2), round(cpd, 4),
+            total,
+            round(p['cost'], 2) if p['cost'] is not None else None,
+            round(cpd, 4) if cpd is not None else None,
             f"{opened_count}/{p['num_boxes']}"
         ]
         for col, val in enumerate(values, 1):

@@ -10,7 +10,7 @@ A web app for tracking diaper purchases, costs, and box opening dates. Built wit
 
 ## Features
 
-- **Purchase tracking** — Record date, brand, number of boxes, diapers per box, and cost
+- **Purchase tracking** — Record date, brand, number of boxes, diapers per box, and optional cost
 - **Per-box opening dates** — Track when each individual box is opened, with date picker controls
 - **Dashboard** — Summary stats: total purchases, boxes, diapers, spending, and average cost per diaper
 - **History** — Full purchase history with inline box opening management and delete

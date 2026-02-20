@@ -59,8 +59,8 @@
         </div>
 
         <div class="form-group">
-            <label for="cost">Total Cost ($)</label>
-            {{ form.cost(class="form-control", step="0.01", min="0.01", placeholder="0.00") }}
+            <label for="cost">Total Cost ($) <span style="font-weight:normal;color:#6c757d;">(optional)</span></label>
+            {{ form.cost(class="form-control", step="0.01", min="0.01", placeholder="Leave blank if unknown") }}
             {% for error in form.cost.errors %}
                 <span class="form-error">{{ error }}</span>
             {% endfor %}

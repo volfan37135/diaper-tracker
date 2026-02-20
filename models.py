@@ -28,7 +28,7 @@ def init_db():
             num_boxes INTEGER NOT NULL,
             diapers_per_box INTEGER NOT NULL,
             brand TEXT NOT NULL,
-            cost REAL NOT NULL,
+            cost REAL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
@@ -198,6 +198,34 @@ def update_box_opening(opening_id, date_opened):
         (date_opened, opening_id)
     )
     conn.commit()
+    conn.close()
+
+
+def migrate_cost_nullable():
+    """Drop NOT NULL constraint from cost column (SQLite requires table recreation)."""
+    conn = get_db()
+    create_stmt = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='purchases'"
+    ).fetchone()['sql']
+    if 'cost REAL NOT NULL' in create_stmt:
+        conn.executescript('''
+            PRAGMA foreign_keys = OFF;
+            CREATE TABLE purchases_new (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL,
+                size TEXT NOT NULL DEFAULT '',
+                num_boxes INTEGER NOT NULL,
+                diapers_per_box INTEGER NOT NULL,
+                brand TEXT NOT NULL,
+                cost REAL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            INSERT INTO purchases_new SELECT * FROM purchases;
+            DROP TABLE purchases;
+            ALTER TABLE purchases_new RENAME TO purchases;
+            PRAGMA foreign_keys = ON;
+        ''')
+        conn.commit()
     conn.close()
 
 

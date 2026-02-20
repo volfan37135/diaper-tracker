@@ -24,7 +24,7 @@
         <tbody>
             {% for p in purchases %}
             {% set total = p.num_boxes * p.diapers_per_box %}
-            {% set cpd = p.cost / total if total > 0 else 0 %}
+            {% set cpd = (p.cost / total) if (p.cost is not none and total > 0) else none %}
             {% set openings = box_openings.get(p.id, []) %}
             {% set opened_list = openings|selectattr('date_opened')|list %}
             {% set opened_count = opened_list|length %}
@@ -35,8 +35,8 @@
                 <td>{{ p.num_boxes }}</td>
                 <td>{{ p.diapers_per_box }}</td>
                 <td>{{ total }}</td>
-                <td>${{ "%.2f"|format(p.cost) }}</td>
-                <td>${{ "%.4f"|format(cpd) }}</td>
+                <td>{{ "$%.2f"|format(p.cost) if p.cost is not none else '—' }}</td>
+                <td>{{ "$%.4f"|format(cpd) if cpd is not none else '—' }}</td>
                 <td class="date-opened-cell">
                     {% if opened_count == p.num_boxes and opened_count > 0 %}
                     <span class="date-opened-status all-opened">{{ opened_list[0].date_opened }}</span>

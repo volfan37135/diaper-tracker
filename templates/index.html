@@ -51,7 +51,7 @@
             <tbody>
                 {% for p in recent %}
                 {% set total = p.num_boxes * p.diapers_per_box %}
-                {% set cpd = p.cost / total if total > 0 else 0 %}
+                {% set cpd = (p.cost / total) if (p.cost is not none and total > 0) else none %}
                 <tr>
                     <td>{{ p.date }}</td>
                     <td>{{ p.brand }}</td>
@@ -59,8 +59,8 @@
                     <td>{{ p.num_boxes }}</td>
                     <td>{{ p.diapers_per_box }}</td>
                     <td>{{ total }}</td>
-                    <td>${{ "%.2f"|format(p.cost) }}</td>
-                    <td>${{ "%.4f"|format(cpd) }}</td>
+                    <td>{{ "$%.2f"|format(p.cost) if p.cost is not none else '—' }}</td>
+                    <td>{{ "$%.4f"|format(cpd) if cpd is not none else '—' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
