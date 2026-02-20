@@ -116,6 +116,14 @@ def open_box(purchase_id):
     return redirect(url_for('history'))
 
 
+# --- Inventory ---
+
+@app.route('/inventory')
+def inventory():
+    inventory_data = models.get_inventory_by_size()
+    return render_template('inventory.html', inventory=inventory_data)
+
+
 # --- Brands ---
 
 @app.route('/brands', methods=['GET', 'POST'])

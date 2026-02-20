@@ -201,6 +201,49 @@ def update_box_opening(opening_id, date_opened):
     conn.close()
 
 
+SIZE_ORDER = ['Newborn', 'Size 1', 'Size 2', 'Size 3', 'Size 4', 'Size 5', 'Size 6', 'Size 7']
+
+
+def get_inventory_by_size():
+    """Aggregate boxes purchased vs opened per diaper size."""
+    conn = get_db()
+    rows = conn.execute('''
+        SELECT
+            p.size,
+            SUM(p.num_boxes) as total_boxes,
+            COALESCE(SUM(open_counts.opened), 0) as boxes_opened
+        FROM purchases p
+        LEFT JOIN (
+            SELECT purchase_id, COUNT(*) as opened
+            FROM box_openings
+            WHERE date_opened IS NOT NULL
+            GROUP BY purchase_id
+        ) open_counts ON open_counts.purchase_id = p.id
+        WHERE p.size != ''
+        GROUP BY p.size
+    ''').fetchall()
+    conn.close()
+
+    inventory = []
+    for row in rows:
+        total = row['total_boxes']
+        opened = row['boxes_opened']
+        inventory.append({
+            'size': row['size'],
+            'boxes_unopened': total - opened,
+            'boxes_used': opened,
+        })
+
+    def sort_key(item):
+        try:
+            return SIZE_ORDER.index(item['size'])
+        except ValueError:
+            return len(SIZE_ORDER)
+
+    inventory.sort(key=sort_key)
+    return inventory
+
+
 def migrate_cost_nullable():
     """Drop NOT NULL constraint from cost column (SQLite requires table recreation)."""
     conn = get_db()

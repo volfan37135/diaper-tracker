@@ -16,6 +16,7 @@
                 <li><a href="{{ url_for('add_purchase') }}" {% if request.endpoint == 'add_purchase' %}class="active"{% endif %}>Add Purchase</a></li>
                 <li><a href="{{ url_for('history') }}" {% if request.endpoint == 'history' %}class="active"{% endif %}>History</a></li>
                 <li><a href="{{ url_for('manage_brands') }}" {% if request.endpoint == 'manage_brands' %}class="active"{% endif %}>Brands</a></li>
+                <li><a href="{{ url_for('inventory') }}" {% if request.endpoint == 'inventory' %}class="active"{% endif %}>Inventory</a></li>
                 <li class="nav-dropdown">
                     <a href="#" class="dropdown-toggle">Export &#9662;</a>
                     <ul class="dropdown-menu">

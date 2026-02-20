@@ -507,6 +507,24 @@ a:hover { text-decoration: underline; }
 .quick-actions { text-align: center; margin-top: 20px; }
 .export-actions { margin-top: 20px; display: flex; gap: 12px; }
 
+/* === Inventory === */
+.inventory-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.inventory-header h1 { margin: 0; }
+
+.inventory-card { padding: 0; overflow: hidden; }
+
+.inventory-table { margin: 0; }
+.inventory-table th,
+.inventory-table td { padding: 14px 24px; }
+.inventory-table .num-col { text-align: right; font-variant-numeric: tabular-nums; }
+.inventory-table .size-col { font-weight: 500; }
+.inventory-table .zero-stock { color: var(--danger); font-weight: 600; }
+
 .footer {
     text-align: center;
     padding: 20px;

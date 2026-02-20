@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Inventory - Diaper Tracker{% endblock %}
+
+{% block content %}
+<div class="inventory-header">
+    <h1>Inventory</h1>
+    <a href="{{ url_for('inventory') }}" class="btn btn-secondary btn-sm">&#8635; Refresh</a>
+</div>
+
+{% if inventory %}
+<div class="card inventory-card">
+    <div class="table-responsive">
+        <table class="table inventory-table">
+            <thead>
+                <tr>
+                    <th>Diaper Size</th>
+                    <th class="num-col">Boxes Unopened</th>
+                    <th class="num-col">Boxes Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in inventory %}
+                <tr>
+                    <td class="size-col">{{ row.size }}</td>
+                    <td class="num-col {% if row.boxes_unopened == 0 %}zero-stock{% endif %}">
+                        {{ row.boxes_unopened }}
+                    </td>
+                    <td class="num-col">{{ row.boxes_used }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<p class="empty-state">No purchases recorded yet. <a href="{{ url_for('add_purchase') }}">Add your first purchase!</a></p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-refresh every 60 seconds
+    setTimeout(function () { location.reload(); }, 60000);
+</script>
+{% endblock %}
